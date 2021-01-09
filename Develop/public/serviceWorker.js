@@ -1,4 +1,4 @@
-const cacheFiles = [
+const CAHE_NAME = [
     "/",
     "/index.html",
     "/styles.css",
@@ -9,15 +9,15 @@ const cacheFiles = [
     
   ];
   
-  const staticName = "static-cache-v2";
-  const dataName = "data-cache-v1";
+  const staticFiles = "static-cache-v2";
+  const DATA_CACHE_NAME = "data-cache-v1";
   
   // install
   self.addEventListener("install", function(evt) {
     evt.waitUntil(
-      caches.open(staticName).then(cache => {
+      caches.open(staticFiles).then(cache => {
         console.log("Your files have been cached successfully.");
-        return cache.addAll(cacheFiles);
+        return cache.addAll(CAHE_NAME);
       })
     );
   
@@ -29,7 +29,7 @@ const cacheFiles = [
       caches.keys().then(keyList => {
         return Promise.all(
           keyList.map(key => {
-            if (key !== staticName && key !== dataName) {
+            if (key !== staticName && key !== DATA_CACHE_NAME) {
               console.log("Cached data deleted.", key);
               return caches.delete(key);
             }
