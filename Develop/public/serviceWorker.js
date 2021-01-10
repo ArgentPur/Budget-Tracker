@@ -1,11 +1,11 @@
-const CAHE_NAME = [
+const CACHE_NAME = [
     "/",
     "/index.html",
     "/styles.css",
     "/index.js",
     "icons/icon-192x192.png",
     "icons/icon-512x512.png",
-    "/manifest.json",
+    "/manifest.webmanifest",
     
   ];
   
@@ -17,7 +17,7 @@ const CAHE_NAME = [
     evt.waitUntil(
       caches.open(staticFiles).then(cache => {
         console.log("Your files have been cached successfully.");
-        return cache.addAll(CAHE_NAME);
+        return cache.addAll(CACHE_NAME);
       })
     );
   
@@ -29,7 +29,7 @@ const CAHE_NAME = [
       caches.keys().then(keyList => {
         return Promise.all(
           keyList.map(key => {
-            if (key !== staticName && key !== DATA_CACHE_NAME) {
+            if (key !== staticFiles && key !== DATA_CACHE_NAME) {
               console.log("Cached data deleted.", key);
               return caches.delete(key);
             }
@@ -46,7 +46,7 @@ const CAHE_NAME = [
     // cache requests to "/api/"
     if (evt.request.url.includes("/api/")) {
       evt.respondWith(
-        caches.open(dataName).then(cache => {
+        caches.open(DATA_CACHE_NAME).then(cache => {
           return fetch(evt.request)
             .then(response => {
               // Clone valid responses
@@ -54,7 +54,7 @@ const CAHE_NAME = [
                 cache.put(evt.request.url, response.clone());
               }
   
-              return response;
+              return response;DATA_CACHE_NAME
             })
             .catch(err => {
               return cache.match(evt.request);
