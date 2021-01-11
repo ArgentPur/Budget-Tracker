@@ -1,10 +1,14 @@
 let db;
+
 const request = indexedDB.open("budget", 1);
 
 request.onupgradeneeded = function (event) {
+
   const db = event.target.result;
+
   db.createObjectStore("pending", { autoIncrement: true });
 };
+
 
 request.onsuccess = function (event) {
   db = event.target.result;
@@ -15,11 +19,14 @@ request.onsuccess = function (event) {
   }
 };
 
+
 function checkDatabase() {
+
   const db = request.result;
   let transaction = db.transaction([pendingObjectStoreName], `readwrite`);
   let store = transaction.objectStore(pendingObjectStoreName);
   const getAll = store.getAll();
+
   getAll.onsuccess = () => {
       if (getAll.result.length > 0) {
           fetch(`/api/transaction/bulk`, {
